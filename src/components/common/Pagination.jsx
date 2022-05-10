@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export class Pagination extends Component {
   render() {
-    const { pageSize, itemsCount, onPageChange } = this.props;
+    const { pageSize, itemsCount, onPageChange, currentPage } = this.props;
     const pagesCount = Math.ceil(itemsCount / pageSize);
 
     if (pagesCount === 1) return null; //do not render this Pagiantion if there is nothing more than 1 page
@@ -16,7 +16,7 @@ export class Pagination extends Component {
         {pages.map((page, index) => (
           <li
             key={index}
-            className="page-item"
+            className={currentPage === page ? 'page-item active' : 'page-item'}
             onClick={() => onPageChange(page)}
           >
             <a className="page-link" href="#" tabIndex="-1">
