@@ -13,7 +13,17 @@ class Movies extends Component {
 
   handleDelete = (movie) => {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies });
+
+    this.setState({ movies }, this.checkLastMovieOnPageDelete);
+  };
+
+  checkLastMovieOnPageDelete = () => {
+    //if this is the last movie on the page, so deleting it will result in an empty page, so we want to go back a step and set the currentPage to currentPage - 1 to see last page movies.
+    const { movies, currentPage, pageSize } = this.state;
+
+    if (movies.length % pageSize === 0 && currentPage !== 1) {
+      this.setState((oldState) => ({ currentPage: oldState.currentPage - 1 }));
+    }
   };
 
   handleLike = (movie) => {
