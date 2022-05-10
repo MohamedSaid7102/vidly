@@ -10,7 +10,7 @@ export class Pagination extends Component {
     if (pagesCount === 1) return null; //do not render this Pagiantion if there is nothing more than 1 page
 
     const pages = _.range(1, pagesCount + 1);
-
+    
     return (
       <ul className="pagination pagination-m">
         {pages.map((page, index) => (

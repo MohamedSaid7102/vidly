@@ -10,14 +10,29 @@ class Movies extends Component {
   state = {
     movies: [],
     genres: [],
+    selectedGenre: { _id: '', name: 'All' },
     pageSize: 4,
     currentPage: 1,
   };
 
   componentDidMount() {
     const genres = [{ _id: '', name: 'All' }, ...getGenres()];
-    this.setState({ movies: getMovies(), genres });
+    this.setState({
+      movies: getMovies(),
+      genres,
+      // filteredMoviesLength: getMovies().length,
+    });
   }
+
+  checkLastMovieOnPageDelete = () => {
+    //if this is the last movie on the page, so deleting it will result in an empty page, so we want to go back a step and set the currentPage to currentPage - 1 to see last page movies.
+    const { currentPage, pageSize, movies } = this.state;
+    const lastPage = Math.ceil(movies.length / pageSize) + 1;
+
+    if (movies.length % pageSize === 0 && currentPage === lastPage) {
+      this.setState((oldState) => ({ currentPage: oldState.currentPage - 1 }));
+    }
+  };
 
   handleDelete = (movie) => {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
@@ -25,15 +40,36 @@ class Movies extends Component {
     this.setState({ movies }, this.checkLastMovieOnPageDelete);
   };
 
-  checkLastMovieOnPageDelete = () => {
-    //if this is the last movie on the page, so deleting it will result in an empty page, so we want to go back a step and set the currentPage to currentPage - 1 to see last page movies.
-    const { movies, currentPage, pageSize } = this.state;
-    const lastPage = Math.ceil(movies.length / pageSize) + 1;
-    console.log(lastPage);
-    if (movies.length % pageSize === 0 && currentPage === lastPage) {
-      this.setState((oldState) => ({ currentPage: oldState.currentPage - 1 }));
+  /**
+   * handleDelete setState call back
+   * , () => {
+      // set current genra movies length
+      const { selectedGenre } = this.state;
+      const filteredMovies =
+        selectedGenre && selectedGenre._id !== ''
+          ? movies.filter((m) => m.genre._id === selectedGenre._id)
+          : movies;
+      this.setState(
+        {
+          filteredMoviesLength: filteredMovies.length,
+        },
+        this.checkLastMovieOnPageDelete
+      );
     }
+    *
+    *
+    *  setFilteredMoviesLength = () => {
+    // set current genra movies length
+    const { selectedGenre, movies: allMovies } = this.state;
+    const filteredMovies =
+      selectedGenre && selectedGenre._id !== ''
+        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+        : allMovies;
+    this.setState({
+      filteredMoviesLength: filteredMovies.length,
+    });
   };
+   */
 
   handleLike = (movie) => {
     const movies = [...this.state.movies];
@@ -48,12 +84,17 @@ class Movies extends Component {
   };
 
   handleGenreChange = (genre) => {
-    this.setState({ selectedGenre: genre });
-    console.log(genre);
+    // Set genra
+    this.setState(
+      {
+        selectedGenre: genre,
+        currentPage: 1,
+      }
+      // this.setFilteredMoviesLength
+    );
   };
 
   render() {
-    const { length: count } = this.state.movies;
     const {
       movies: allMovies,
       pageSize,
@@ -62,9 +103,15 @@ class Movies extends Component {
       selectedGenre,
     } = this.state;
 
-    if (count === 0) return <p>There are no movies in the database.</p>;
+    const filteredMovies =
+      selectedGenre && selectedGenre._id !== ''
+        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+        : allMovies;
 
-    let movies = paginate(allMovies, currentPage, pageSize);
+    let movies = paginate(filteredMovies, currentPage, pageSize);
+
+    if (allMovies.length === 0)
+      return <p>There are no movies in the database.</p>;
 
     return (
       <React.Fragment>
@@ -80,7 +127,7 @@ class Movies extends Component {
               />
             </div>
             <div className="col-8">
-              <p>Showing {count} movies in the database.</p>
+              <p>Showing {filteredMovies.length} movies in the database.</p>
               <table className="table">
                 <thead>
                   <tr>
@@ -119,7 +166,7 @@ class Movies extends Component {
               </table>
               <Pagination
                 pageSize={pageSize}
-                itemsCount={count}
+                itemsCount={filteredMovies.length}
                 currentPage={currentPage}
                 onPageChange={this.handlePageChange}
               />
