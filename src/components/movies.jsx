@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Like from './common/like';
 import { getMovies } from '../services/fakeMovieService';
 import Pagination from './common/Pagination';
-import paginate from './utils/pagination';
+import paginate from '../utils/pagination';
 import ListGroup from './common/ListGroup';
 import { getGenres } from '../services/fakeGenreService';
 import Delete from './common/Delete';
