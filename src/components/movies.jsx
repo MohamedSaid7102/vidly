@@ -124,8 +124,6 @@ class Movies extends Component {
             <div className="col-3">
               <ListGroup
                 items={genres}
-                propertyValue="name"
-                propertyId="_id"
                 selectedItem={selectedGenre}
                 onChange={this.handleGenreChange}
               />

@@ -29,4 +29,9 @@ ListGroup.propTypes = {
   items: PropTypes.array.isRequired,
 };
 
+ListGroup.defaultProps = {
+  propertyId: '_id',
+  propertyValue: 'name'
+}
+
 export default ListGroup;
