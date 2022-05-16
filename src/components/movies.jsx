@@ -5,6 +5,7 @@ import Pagination from './common/Pagination';
 import paginate from './utils/pagination';
 import ListGroup from './common/ListGroup';
 import { getGenres } from '../services/fakeGenreService';
+import Delete from './common/Delete';
 
 class Movies extends Component {
   state = {
@@ -25,7 +26,7 @@ class Movies extends Component {
   }
 
   checkLastMovieOnPageDelete = () => {
-    //if this is the last movie on the page, so deleting it will result in an empty page, so we want to go back a step and set the currentPage to currentPage - 1 to see last page movies.
+    //if this is the last movie on the page, so deleting it will result in an empty page, and if this is page 2 so user will lose the ability to navigate to page 1 however there still movies but the navigation is disappeared and user still in page 2 "which is empty", so we want to go a step back and set the currentPage to currentPage - 1 to see last page movies.
     const { currentPage, pageSize, movies } = this.state;
     const lastPage = Math.ceil(movies.length / pageSize) + 1;
 
@@ -104,7 +105,9 @@ class Movies extends Component {
     } = this.state;
 
     const filteredMovies =
-      selectedGenre && selectedGenre._id !== ''
+      selectedGenre &&
+      selectedGenre._id !==
+        '' /* if user slect genra and the selected genra is not 'all' */
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
 
@@ -153,12 +156,9 @@ class Movies extends Component {
                         />
                       </td>
                       <td>
-                        <button
-                          onClick={() => this.handleDelete(movie)}
-                          className="btn btn-danger btn-sm"
-                        >
-                          Delete
-                        </button>
+                        <Delete 
+                          item={movie}
+                          onDelete={this.handleDelete} />
                       </td>
                     </tr>
                   ))}
