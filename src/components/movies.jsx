@@ -6,6 +6,7 @@ import paginate from '../utils/pagination';
 import ListGroup from './common/ListGroup';
 import { getGenres } from '../services/fakeGenreService';
 import Delete from './common/Delete';
+import MoviesTable from './MoviesTable';
 
 class Movies extends Component {
   state = {
@@ -130,45 +131,15 @@ class Movies extends Component {
               />
             </div>
             <div className="col-8">
-              <p>Showing {filteredMovies.length} movies in the database.</p>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Genre</th>
-                    <th>Stock</th>
-                    <th>Rate</th>
-                    <th />
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {movies.map((movie) => (
-                    <tr key={movie._id}>
-                      <td>{movie.title}</td>
-                      <td>{movie.genre.name}</td>
-                      <td>{movie.numberInStock}</td>
-                      <td>{movie.dailyRentalRate}</td>
-                      <td>
-                        <Like
-                          liked={movie.liked}
-                          onClick={() => this.handleLike(movie)}
-                        />
-                      </td>
-                      <td>
-                        <Delete 
-                          item={movie}
-                          onDelete={this.handleDelete} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <Pagination
+              <MoviesTable
+                filteredMoviesLength={filteredMovies.length}
+                movies={movies}
+                handleLike={this.handleLike}
+                handleDelete={this.handleDelete}
                 pageSize={pageSize}
-                itemsCount={filteredMovies.length}
+                moviesCount={filteredMovies.length}
                 currentPage={currentPage}
-                onPageChange={this.handlePageChange}
+                handlePageChange={this.handlePageChange}
               />
             </div>
           </div>
