@@ -5,7 +5,6 @@ import Pagination from './common/Pagination';
 import paginate from '../utils/pagination';
 import ListGroup from './common/ListGroup';
 import { getGenres } from '../services/fakeGenreService';
-import Delete from './common/Delete';
 import MoviesTable from './MoviesTable';
 
 class Movies extends Component {
@@ -129,15 +128,19 @@ class Movies extends Component {
               />
             </div>
             <div className="col-8">
+              <p>Showing {filteredMovies.length} movies in the database.</p>
               <MoviesTable
-                filteredMoviesLength={filteredMovies.length}
                 movies={movies}
-                handleLike={this.handleLike}
-                handleDelete={this.handleDelete}
                 pageSize={pageSize}
-                moviesCount={filteredMovies.length}
                 currentPage={currentPage}
-                handlePageChange={this.handlePageChange}
+                onDelete={this.handleDelete}
+                onLike={this.handleLike}
+              />
+              <Pagination
+                pageSize={pageSize}
+                itemsCount={filteredMovies.length}
+                currentPage={currentPage}
+                onPageChange={this.handlePageChange}
               />
             </div>
           </div>

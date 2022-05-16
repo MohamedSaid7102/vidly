@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import Delete from './common/Delete';
 import Like from './common/like';
-import Pagination from './common/Pagination';
 
 export class MoviesTable extends Component {
   render() {
-    const { filteredMoviesLength, movies, handleLike,handleDelete, pageSize,moviesCount,currentPage ,handlePageChange} = this.props;
+    const { movies, onLike, onDelete } = this.props;
     return (
       <div>
-        <p>Showing {filteredMoviesLength} movies in the database.</p>
         <table className="table">
           <thead>
             <tr>
@@ -28,24 +26,15 @@ export class MoviesTable extends Component {
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
                 <td>
-                  <Like
-                    liked={movie.liked}
-                    onClick={() => handleLike(movie)}
-                  />
+                  <Like liked={movie.liked} onClick={() => onLike(movie)} />
                 </td>
                 <td>
-                  <Delete item={movie} onDelete={handleDelete} />
+                  <Delete item={movie} onClick={onDelete} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <Pagination
-          pageSize={pageSize}
-          itemsCount={moviesCount}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
       </div>
     );
   }
