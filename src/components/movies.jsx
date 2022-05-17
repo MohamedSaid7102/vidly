@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import Like from './common/like';
 import { getMovies } from '../services/fakeMovieService';
 import Pagination from './common/Pagination';
 import paginate from '../utils/pagination';
 import ListGroup from './common/ListGroup';
 import { getGenres } from '../services/fakeGenreService';
 import MoviesTable from './MoviesTable';
+import _ from 'lodash';
 
 class Movies extends Component {
   state = {
     movies: [],
     genres: [],
     selectedGenre: { _id: '', name: 'All' },
+    sortColumn: { path: 'title', order: 'asc' },
     pageSize: 4,
     currentPage: 1,
   };
@@ -95,6 +96,29 @@ class Movies extends Component {
     );
   };
 
+  handleSort = (path) => {
+    const sortColumn = { ...this.state.sortColumn };
+    // My Logic
+    // console.log(path, sortColumn.path);
+    // sortColumn.path = path;
+    // sortColumn.order =
+    //   sortColumn.path === path
+    //     ? sortColumn.order === 'asc'
+    //       ? 'desc'
+    //       : 'asc'
+    //     : 'asc';
+    // this.setState({ sortColumn });
+
+    // Mosh Logic
+    if (path === sortColumn.path) {
+      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn.path = path;
+      sortColumn.order = 'asc';
+    }
+    this.setState({ sortColumn });
+  };
+
   render() {
     const {
       movies: allMovies,
@@ -102,6 +126,7 @@ class Movies extends Component {
       currentPage,
       genres,
       selectedGenre,
+      sortColumn,
     } = this.state;
 
     const filteredMovies =
@@ -111,7 +136,13 @@ class Movies extends Component {
         ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
         : allMovies;
 
-    let movies = paginate(filteredMovies, currentPage, pageSize);
+    const sortedMovies = _.orderBy(
+      filteredMovies,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+
+    let movies = paginate(sortedMovies, currentPage, pageSize);
 
     if (allMovies.length === 0)
       return <p>There are no movies in the database.</p>;
@@ -135,6 +166,7 @@ class Movies extends Component {
                 currentPage={currentPage}
                 onDelete={this.handleDelete}
                 onLike={this.handleLike}
+                onSort={this.handleSort}
               />
               <Pagination
                 pageSize={pageSize}

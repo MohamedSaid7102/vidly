@@ -4,16 +4,16 @@ import Like from './common/like';
 
 export class MoviesTable extends Component {
   render() {
-    const { movies, onLike, onDelete } = this.props;
+    const { movies, onLike, onDelete, onSort } = this.props;
     return (
       <div>
         <table className="table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Stock</th>
-              <th>Rate</th>
+              <th onClick={() => onSort('title')}>Title</th>
+              <th onClick={() => onSort('genre.name')}>Genre</th>
+              <th onClick={() => onSort('numberInStock')}>Stock</th>
+              <th onClick={() => onSort('dailyRentalRate')}>Rate</th>
               <th />
               <th />
             </tr>

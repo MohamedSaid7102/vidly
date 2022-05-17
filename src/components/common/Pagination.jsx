@@ -19,7 +19,7 @@ export class Pagination extends Component {
             className={currentPage === page ? 'page-item active' : 'page-item'}
             onClick={() => onPageChange(page)}
           >
-            <a className="page-link" href="#" tabIndex="-1">
+            <a className="page-link" tabIndex="-1">
               {page}
             </a>
           </li>
