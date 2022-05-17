@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Delete from './common/Delete';
 import Like from './common/like';
 import TableHeader from './common/TableHeader';
+import TableBody from './common/TableBody';
 
 export class MoviesTable extends Component {
   columns = [
@@ -10,11 +11,19 @@ export class MoviesTable extends Component {
     { label: 'Genre', path: 'genre.name' },
     { label: 'Stock', path: 'numberInStock' },
     { label: 'Rate', path: 'dailyRentalRate' },
-    { key: 'like' },
-    { key: 'delete' },
+    {
+      key: 'like',
+      content: (movie) => (
+        <Like liked={movie.liked} onClick={() => this.props.onLike(movie)} />
+      ),
+    },
+    {
+      key: 'delete',
+      content: (movie) => (<Delete item={movie} onClick={this.props.onDelete} />),
+    },
   ];
   render() {
-    const { movies, onLike, onDelete, onSort, sortColumn } = this.props;
+    const { movies, onSort, sortColumn } = this.props;
     return (
       <div>
         <table className="table">
@@ -23,22 +32,7 @@ export class MoviesTable extends Component {
             onSort={onSort}
             sortColumn={sortColumn}
           />
-          <tbody>
-            {movies.map((movie) => (
-              <tr key={movie._id}>
-                <td>{movie.title}</td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <Like liked={movie.liked} onClick={() => onLike(movie)} />
-                </td>
-                <td>
-                  <Delete item={movie} onClick={onDelete} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <TableBody items={movies} properties={this.columns} />
         </table>
       </div>
     );
