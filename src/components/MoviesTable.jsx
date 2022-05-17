@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Delete from './common/Delete';
 import Like from './common/like';
 import TableHeader from './common/TableHeader';
 import TableBody from './common/TableBody';
@@ -19,7 +18,14 @@ export class MoviesTable extends Component {
     },
     {
       key: 'delete',
-      content: (movie) => (<Delete item={movie} onClick={this.props.onDelete} />),
+      content: (movie) => (
+        <button
+          onClick={() => this.props.onDelete(movie)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
     },
   ];
   render() {
@@ -32,7 +38,7 @@ export class MoviesTable extends Component {
             onSort={onSort}
             sortColumn={sortColumn}
           />
-          <TableBody items={movies} properties={this.columns} />
+          <TableBody data={movies} columns={this.columns} />
         </table>
       </div>
     );

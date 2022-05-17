@@ -2,20 +2,24 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 
 export class TableBody extends Component {
-  renderCell = (item, property) => {
-    if (property.path) return _.get(item, property.path);
+  renderCell = (item, column) => {
+    if (column.content) return column.content(item);
 
-    return property.content(item);
+    return _.get(item, column.path);
+  };
+
+  generateKey = (item, column) => {
+    return item[this.props.propertyId] + (column.path || column.key);
   };
   render() {
-    const { items, properties, propertyId } = this.props;
+    const { data, columns, propertyId } = this.props;
     return (
       <tbody>
-        {items.map((item) => (
+        {data.map((item) => (
           <tr key={item[propertyId]}>
-            {properties.map((property) => (
-              <td key={property.path || property.key}>
-                {this.renderCell(item, property)}
+            {columns.map((column) => (
+              <td key={this.generateKey(item, column)}>
+                {this.renderCell(item, column)}
               </td>
             ))}
           </tr>
