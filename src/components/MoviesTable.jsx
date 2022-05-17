@@ -2,49 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Delete from './common/Delete';
 import Like from './common/like';
+import TableHeader from './common/TableHeader';
 
 export class MoviesTable extends Component {
-  raiseSortEvent = (path) => {
-    const sortColumn = { ...this.props.sortColumn };
-    /*    My Logic
-    console.log(path, sortColumn.path);
-    sortColumn.path = path;
-    sortColumn.order =
-      sortColumn.path === path
-        ? sortColumn.order === 'asc'
-          ? 'desc'
-          : 'asc'
-        : 'asc';
-    this.setState({ sortColumn });*/
-
-    // Mosh Logic
-    if (path === sortColumn.path) {
-      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
-    this.props.onSort(sortColumn);
-  };
+  columns = [
+    { label: 'Title', path: 'title' },
+    { label: 'Genre', path: 'genre.name' },
+    { label: 'Stock', path: 'numberInStock' },
+    { label: 'Rate', path: 'dailyRentalRate' },
+    { key: 'like' },
+    { key: 'delete' },
+  ];
   render() {
-    const { movies, onLike, onDelete } = this.props;
+    const { movies, onLike, onDelete, onSort, sortColumn } = this.props;
     return (
       <div>
         <table className="table">
-          <thead>
-            <tr>
-              <th onClick={() => this.raiseSortEvent('title')}>Title</th>
-              <th onClick={() => this.raiseSortEvent('genre.name')}>Genre</th>
-              <th onClick={() => this.raiseSortEvent('numberInStock')}>
-                Stock
-              </th>
-              <th onClick={() => this.raiseSortEvent('dailyRentalRate')}>
-                Rate
-              </th>
-              <th />
-              <th />
-            </tr>
-          </thead>
+          <TableHeader
+            columns={this.columns}
+            onSort={onSort}
+            sortColumn={sortColumn}
+          />
           <tbody>
             {movies.map((movie) => (
               <tr key={movie._id}>
