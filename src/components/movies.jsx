@@ -96,26 +96,7 @@ class Movies extends Component {
     );
   };
 
-  handleSort = (path) => {
-    const sortColumn = { ...this.state.sortColumn };
-    // My Logic
-    // console.log(path, sortColumn.path);
-    // sortColumn.path = path;
-    // sortColumn.order =
-    //   sortColumn.path === path
-    //     ? sortColumn.order === 'asc'
-    //       ? 'desc'
-    //       : 'asc'
-    //     : 'asc';
-    // this.setState({ sortColumn });
-
-    // Mosh Logic
-    if (path === sortColumn.path) {
-      sortColumn.order = sortColumn.order === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
+  handleSort = (sortColumn) => {
     this.setState({ sortColumn });
   };
 
@@ -164,6 +145,7 @@ class Movies extends Component {
                 movies={movies}
                 pageSize={pageSize}
                 currentPage={currentPage}
+                sortColumn={sortColumn}
                 onDelete={this.handleDelete}
                 onLike={this.handleLike}
                 onSort={this.handleSort}
